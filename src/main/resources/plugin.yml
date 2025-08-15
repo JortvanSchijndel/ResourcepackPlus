@@ -1,0 +1,18 @@
+name: ResourcepackPlus
+main: org.jortvanschijndel.ResourcepackPlus
+version: 1.0.0
+api-version: '1.21'
+authors: [ "Jort van Schijndel" ]
+description: Automates resourcepack delivery via GitHub + Dropbox and updates server.properties.
+
+commands:
+  rpp:
+    description: ResourcepackPlus command (GitHub/Dropbox/login/path/update).
+    usage: "/rpp <github|dropbox|dropbox-path|update> ..."
+    permission: resourcepackplus.use
+    aliases: [ resourcepackplus ]
+
+permissions:
+  resourcepackplus.use:
+    description: Allows using ResourcepackPlus commands.
+    default: op

@@ -1,0 +1,19 @@
+# ResourcepackPlus configuration
+# Tokens are stored in tokens.properties (created at runtime) with restricted file permissions where supported.
+
+# Default Dropbox upload path (can be set at runtime with /rpp dropbox-path <path>)
+dropboxPath: "/resourcepacks"
+
+# Whether to announce server restart to everyone on successful update
+announceRestart: true
+
+# How long to wait before restarting after announcing (in seconds)
+restartDelaySeconds: 10
+
+#Tab Completions for /rpp update
+
+githubRepositories:
+  - "https://github.com/owner/repo"
+
+branches:
+  - "Main"
