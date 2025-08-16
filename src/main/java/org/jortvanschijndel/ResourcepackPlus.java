@@ -5,6 +5,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jortvanschijndel.commands.RppCommand;
 import org.jortvanschijndel.storage.TokenStore;
+import org.bstats.bukkit.Metrics;
 
 import java.util.logging.Logger;
 
@@ -45,6 +46,9 @@ public class ResourcepackPlus extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        int pluginId = 26937;
+        Metrics metrics = new Metrics(this, pluginId);
 
         log.info("ResourcepackPlus enabled.");
     }
