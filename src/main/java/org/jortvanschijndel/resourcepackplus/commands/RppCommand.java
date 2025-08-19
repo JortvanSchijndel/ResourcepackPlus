@@ -271,6 +271,8 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
             return;
         }
 
+        boolean restart = args.length == 4 && args[3].equalsIgnoreCase("restart");
+
         String ghUrl = args[1];
         String branch = args[2];
         Messaging.sendMini(sender, "<gray>[RPP] Starting update…");
@@ -281,7 +283,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
             @Override
             public void run() {
                 try {
-// Step 1: Login services
+                    // Step 1: Login services
                     Messaging.sendMini(sender, "<gray>[RPP] Logging into GitHub…");
                     GitHubService gh = new GitHubService(tokens.getGithubToken());
                     String repoSlug = gh.parseOwnerRepoFromUrl(ghUrl);
@@ -300,7 +302,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                     );
                     Messaging.sendMini(sender, "<green>[RPP] Dropbox login OK. Upload path: <yellow>" + path);
 
-// Step 2: Download resourcepack archive from GitHub
+                    // Step 2: Download resourcepack archive from GitHub
                     Messaging.sendMini(sender, "<gray>[RPP] Downloading repository ZIP from GitHub…");
 
                     // Prepare workspace in plugin folder
@@ -328,7 +330,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                         in.transferTo(out);
                     }
 
-                    Messaging.sendMini(sender, "<green>[RPP] Downloaded ZIP: <yellow" +
+                    Messaging.sendMini(sender, "<green>[RPP] Downloaded ZIP: <yellow>" +
                             tempZipFile.getName() + " <gray>(" + tempZipFile.length() + " bytes)");
 
                     //Repackage ZIP to remove nested folder structure
@@ -408,6 +410,10 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                         e.printStackTrace();
                     }
 
+                    if(!restart) {
+                        Messaging.sendMini(sender, "<green>[RPP] Process finished! Re-join or restart the server to view changes.");
+                        return;
+                    }
 
                     // Step 8: Announce restart and restart after delay
                     boolean announce = plugin.getConfig().getBoolean("announceRestart", true);
@@ -470,6 +476,14 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                     // Pull from config: branches list
                     List<String> branches = plugin.getConfig().getStringList("branches");
                     return branches.isEmpty() ? List.of("main", "master") : branches;
+                }
+            }
+        }
+
+        if(args.length == 4) {
+            switch (args[0].toLowerCase(Locale.ROOT)) {
+                case "update" -> {
+                    return List.of("restart");
                 }
             }
         }
