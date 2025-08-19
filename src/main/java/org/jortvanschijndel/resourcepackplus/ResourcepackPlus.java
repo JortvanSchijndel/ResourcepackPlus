@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jortvanschijndel.resourcepackplus.commands.RppCommand;
+import org.jortvanschijndel.resourcepackplus.listeners.JoinListener;
+import org.jortvanschijndel.resourcepackplus.storage.PackStore;
 import org.jortvanschijndel.resourcepackplus.storage.TokenStore;
 import org.bstats.bukkit.Metrics;
 import org.jortvanschijndel.resourcepackplus.util.ServerPropertiesUtil;
@@ -17,6 +19,7 @@ public class ResourcepackPlus extends JavaPlugin {
 
     private static ResourcepackPlus instance;
     private TokenStore tokenStore;
+    private PackStore packStore;
     private Logger log;
     private String resourcePackUrl;
     private String resourcePackSha1;
@@ -28,6 +31,9 @@ public class ResourcepackPlus extends JavaPlugin {
     public TokenStore getTokenStore() {
         return tokenStore;
     }
+    public PackStore getPackStore() {
+        return packStore;
+    }
 
     @Override
     public void onEnable() {
@@ -38,6 +44,9 @@ public class ResourcepackPlus extends JavaPlugin {
         // Initialize token store
         this.tokenStore = new TokenStore(getDataFolder());
 
+        // Initialize pack store
+        this.packStore = new PackStore(getDataFolder());
+
         // Register command executor + tab completion + listener
         final PluginCommand cmd = getCommand("rpp");
         if (cmd != null) {
@@ -47,25 +56,15 @@ public class ResourcepackPlus extends JavaPlugin {
 
             // Register chat listener for Dropbox auth code
             getServer().getPluginManager().registerEvents(rpp, this);
+            getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         } else {
             log.severe("Command 'rpp' not found in plugin.yml! Disabling plugin.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        // Check the current resource pack and save it into memory
-        File serverRoot = this.getDataFolder().getParentFile().getParentFile();
-        File serverProps = new File(serverRoot, "server.properties");
-
-        if (!serverProps.exists()) return;
-        Properties p;
-        try {
-            p = ServerPropertiesUtil.load(serverProps);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        resourcePackUrl = p.getProperty("resource-pack");
-        resourcePackSha1 = p.getProperty("resource-pack-sha1");
+        resourcePackUrl = packStore.getUrl();
+        resourcePackSha1 = packStore.getSha1();
 
         if(resourcePackUrl != null){
             log.info("Found resource pack in server.properties: " + resourcePackUrl);

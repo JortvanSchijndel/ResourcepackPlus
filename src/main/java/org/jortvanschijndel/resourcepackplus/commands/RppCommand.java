@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jortvanschijndel.resourcepackplus.ResourcepackPlus;
 import org.jortvanschijndel.resourcepackplus.service.DropboxService;
 import org.jortvanschijndel.resourcepackplus.service.GitHubService;
+import org.jortvanschijndel.resourcepackplus.storage.PackStore;
 import org.jortvanschijndel.resourcepackplus.storage.TokenStore;
 import org.jortvanschijndel.resourcepackplus.util.HashUtil;
 import org.jortvanschijndel.resourcepackplus.util.Messaging;
@@ -36,11 +37,13 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
 
     private final ResourcepackPlus plugin;
     private final TokenStore tokens;
+    private final PackStore packStore;
 
 
     public RppCommand(ResourcepackPlus plugin) {
         this.plugin = plugin;
         this.tokens = plugin.getTokenStore();
+        this.packStore = plugin.getPackStore();
     }
 
     private boolean checkPerm(CommandSender sender) {
@@ -386,21 +389,19 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                     Messaging.sendMini(sender, "<green>[RPP] Share link: <yellow>" + direct);
 
                     // Step 6: Update server.properties (UTF-8)
-                    Messaging.sendMini(sender, "<gray>[RPP] Updating server.properties…");
-                    File serverRoot = plugin.getDataFolder().getParentFile().getParentFile();
-                    File serverProps = new File(serverRoot, "server.properties");
-                    if (!serverProps.exists()) {
-                        Messaging.sendMini(sender, "<red>[RPP] server.properties not found at: " + serverProps.getAbsolutePath());
+                    Messaging.sendMini(sender, "<gray>[RPP] Updating pack.properties…");
+                    File packRoot = plugin.getDataFolder();
+                    File packProps = new File(packRoot, "pack.properties");
+                    if (!packProps.exists()) {
+                        Messaging.sendMini(sender, "<red>[RPP] pack.properties not found at: " + packProps.getAbsolutePath());
                         return;
                     }
 
-                    Properties p = ServerPropertiesUtil.load(serverProps);
-                    p.setProperty("resource-pack", direct);
-                    p.setProperty("resource-pack-sha1", sha1);
+                    packStore.setUrlAndSha1(direct, sha1);
                     plugin.setResourcePackUrl(direct);
                     plugin.setResourcePackSha1(sha1);
-                    ServerPropertiesUtil.save(serverProps, p, StandardCharsets.UTF_8);
-                    Messaging.sendMini(sender, "<green>[RPP] server.properties updated.");
+
+                    Messaging.sendMini(sender, "<green>[RPP] pack.properties updated.");
 
                     // Step 7: Delete Work folder
                     try {

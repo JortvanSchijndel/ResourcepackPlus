@@ -40,7 +40,6 @@ public class JoinListener implements Listener {
 
         // Send the resource pack request to the target audience
         player.sendResourcePacks(request);
-
     }
 
 }
