@@ -7,7 +7,7 @@
 
     <groupId>org.jortvanschijndel</groupId>
     <artifactId>ResourcepackPlus</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>ResourcepackPlus</name>
     <description>Automate pulling a resourcepack from GitHub, uploading to Dropbox, and updating server.properties.</description>
 

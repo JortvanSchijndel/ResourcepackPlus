@@ -1,6 +1,6 @@
 name: ResourcepackPlus
 main: org.jortvanschijndel.resourcepackplus.ResourcepackPlus
-version: 1.0.0
+version: 1.0.1
 api-version: '1.21'
 authors: [ "Jort van Schijndel" ]
 description: Automates resourcepack delivery via GitHub + Dropbox and updates server.properties.
