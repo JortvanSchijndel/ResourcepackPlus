@@ -1,4 +1,4 @@
-package org.jortvanschijndel.service;
+package org.jortvanschijndel.resourcepackplus.service;
 
 import org.kohsuke.github.GHRateLimit;
 import org.kohsuke.github.GitHub;

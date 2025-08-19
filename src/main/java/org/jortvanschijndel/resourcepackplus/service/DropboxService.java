@@ -1,4 +1,4 @@
-package org.jortvanschijndel.service;
+package org.jortvanschijndel.resourcepackplus.service;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.http.StandardHttpRequestor;

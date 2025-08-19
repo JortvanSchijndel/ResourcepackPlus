@@ -1,10 +1,10 @@
-package org.jortvanschijndel;
+package org.jortvanschijndel.resourcepackplus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jortvanschijndel.commands.RppCommand;
-import org.jortvanschijndel.storage.TokenStore;
+import org.jortvanschijndel.resourcepackplus.commands.RppCommand;
+import org.jortvanschijndel.resourcepackplus.storage.TokenStore;
 import org.bstats.bukkit.Metrics;
 
 import java.util.logging.Logger;

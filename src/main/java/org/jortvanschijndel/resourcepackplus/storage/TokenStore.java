@@ -1,4 +1,4 @@
-package org.jortvanschijndel.storage;
+package org.jortvanschijndel.resourcepackplus.storage;
 
 import org.bukkit.Bukkit;
 

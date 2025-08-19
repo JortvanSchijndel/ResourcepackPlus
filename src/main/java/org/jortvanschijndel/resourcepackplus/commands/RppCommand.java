@@ -1,4 +1,4 @@
-package org.jortvanschijndel.commands;
+package org.jortvanschijndel.resourcepackplus.commands;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -11,13 +11,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jortvanschijndel.ResourcepackPlus;
-import org.jortvanschijndel.service.DropboxService;
-import org.jortvanschijndel.service.GitHubService;
-import org.jortvanschijndel.storage.TokenStore;
-import org.jortvanschijndel.util.HashUtil;
-import org.jortvanschijndel.util.ServerPropertiesUtil;
-import org.jortvanschijndel.util.ZipUtil;
+import org.jortvanschijndel.resourcepackplus.ResourcepackPlus;
+import org.jortvanschijndel.resourcepackplus.service.DropboxService;
+import org.jortvanschijndel.resourcepackplus.service.GitHubService;
+import org.jortvanschijndel.resourcepackplus.storage.TokenStore;
+import org.jortvanschijndel.resourcepackplus.util.HashUtil;
+import org.jortvanschijndel.resourcepackplus.util.ServerPropertiesUtil;
+import org.jortvanschijndel.resourcepackplus.util.ZipUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;

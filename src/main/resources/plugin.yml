@@ -1,5 +1,5 @@
 name: ResourcepackPlus
-main: org.jortvanschijndel.ResourcepackPlus
+main: org.jortvanschijndel.resourcepackplus.ResourcepackPlus
 version: 1.0.0
 api-version: '1.21'
 authors: [ "Jort van Schijndel" ]

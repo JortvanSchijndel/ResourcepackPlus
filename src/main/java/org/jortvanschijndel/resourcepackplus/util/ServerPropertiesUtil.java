@@ -1,4 +1,4 @@
-package org.jortvanschijndel.util;
+package org.jortvanschijndel.resourcepackplus.util;
 
 import java.io.*;
 import java.nio.charset.Charset;
