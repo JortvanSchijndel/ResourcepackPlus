@@ -6,7 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jortvanschijndel.resourcepackplus.commands.RppCommand;
 import org.jortvanschijndel.resourcepackplus.storage.TokenStore;
 import org.bstats.bukkit.Metrics;
+import org.jortvanschijndel.resourcepackplus.util.ServerPropertiesUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class ResourcepackPlus extends JavaPlugin {
@@ -14,6 +18,8 @@ public class ResourcepackPlus extends JavaPlugin {
     private static ResourcepackPlus instance;
     private TokenStore tokenStore;
     private Logger log;
+    private String resourcePackUrl;
+    private String resourcePackSha1;
 
     public static ResourcepackPlus getInstance() {
         return instance;
@@ -47,8 +53,27 @@ public class ResourcepackPlus extends JavaPlugin {
             return;
         }
 
+        // Check the current resource pack and save it into memory
+        File serverRoot = this.getDataFolder().getParentFile().getParentFile();
+        File serverProps = new File(serverRoot, "server.properties");
+
+        if (!serverProps.exists()) return;
+        Properties p;
+        try {
+            p = ServerPropertiesUtil.load(serverProps);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        resourcePackUrl = p.getProperty("resource-pack");
+        resourcePackSha1 = p.getProperty("resource-pack-sha1");
+
+        if(resourcePackUrl != null){
+            log.info("Found resource pack in server.properties: " + resourcePackUrl);
+        }
+
         int pluginId = 26937;
         Metrics metrics = new Metrics(this, pluginId);
+
 
         log.info("ResourcepackPlus enabled.");
     }
@@ -58,4 +83,22 @@ public class ResourcepackPlus extends JavaPlugin {
     public void onDisable() {
         log.info("ResourcepackPlus disabled.");
     }
+
+    public String getResourcePackUrl() {
+        return resourcePackUrl;
+    }
+
+    public String getResourcePackSha1() {
+        return resourcePackSha1;
+    }
+
+    public void setResourcePackUrl(String url) {
+        this.resourcePackUrl = url;
+    }
+
+    public void setResourcePackSha1(String sha1) {
+        this.resourcePackSha1 = sha1;
+    }
+
+
 }
