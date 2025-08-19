@@ -56,7 +56,7 @@ public class DropboxService {
                     .start()
                     .getLinks();
             if (!links.isEmpty()) {
-                return links.get(0).getUrl();
+                return links.getFirst().getUrl();
             }
             throw e;
         }

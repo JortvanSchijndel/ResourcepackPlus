@@ -2,6 +2,7 @@ package org.jortvanschijndel.resourcepackplus.util;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
@@ -12,7 +13,7 @@ public final class ServerPropertiesUtil {
 
     public static Properties load(File serverProperties) throws IOException {
         Properties p = new Properties();
-        try (Reader r = new InputStreamReader(new FileInputStream(serverProperties), Charset.forName("UTF-8"))) {
+        try (Reader r = new InputStreamReader(new FileInputStream(serverProperties), StandardCharsets.UTF_8)) {
             p.load(r);
         }
         return p;

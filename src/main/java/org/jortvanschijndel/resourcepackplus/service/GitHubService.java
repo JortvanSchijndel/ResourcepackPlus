@@ -1,11 +1,13 @@
 package org.jortvanschijndel.resourcepackplus.service;
 
-import org.kohsuke.github.GHRateLimit;
+import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,17 +21,10 @@ public class GitHubService {
         this.gh = new GitHubBuilder()
                 .withOAuthToken(token)
                 .build();
-
-        GHRateLimit limit = gh.getRateLimit();
-
-        if (limit == null) {
-            throw new IllegalStateException("Unable to read GitHub rate limit.");
-        }
     }
 
     public String getLoginName() throws Exception {
-        String login = gh.getMyself().getLogin();
-        return login;
+        return gh.getMyself().getLogin();
     }
 
     public String parseOwnerRepoFromUrl(String url) {
@@ -53,29 +48,20 @@ public class GitHubService {
     /**
      * Gets the GitHub API URL for downloading repository zipball
      */
-    public URL getZipballUrl(String ownerRepo, String branch) throws IOException {
+    public URL getZipballUrl(String ownerRepo, String branch) throws IOException, URISyntaxException {
 
         // GitHub API endpoint for zipball downloads
         String urlString = String.format("https://api.github.com/repos/%s/zipball/%s", ownerRepo, branch);
-        return new URL(urlString);
+        return new URI(urlString).toURL();
     }
 
     /**
      * Creates an authenticated InputStream for downloading from GitHub API
      * This handles the authentication and follows redirects properly
      */
-    public InputStream getAuthenticatedStream(URL url) throws IOException {
+    public InputStream getAuthenticatedStream(URL url) throws IOException, URISyntaxException {
 
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        // Set authentication header
-        connection.setRequestProperty("Authorization", "Bearer " + token);
-        connection.setRequestProperty("Accept", "application/vnd.github+json");
-        connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
-        connection.setRequestProperty("User-Agent", "ResourcepackPlus/1.0");
-
-        // GitHub API returns 302 redirect to actual download URL
-        connection.setInstanceFollowRedirects(true);
+        HttpURLConnection connection = getHttpURLConnection(url);
 
         // Connect and handle response
         int responseCode = connection.getResponseCode();
@@ -87,11 +73,25 @@ public class GitHubService {
             // Handle redirect manually if needed
             String redirectUrl = connection.getHeaderField("Location");
             connection.disconnect();
-            return getAuthenticatedStream(new URL(redirectUrl));
+            return getAuthenticatedStream(new URI(redirectUrl).toURL());
         } else {
             String errorMsg = "HTTP " + responseCode + ": " + connection.getResponseMessage();
             connection.disconnect();
             throw new IOException("Failed to download zipball: " + errorMsg);
         }
+    }
+
+    private @NotNull HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Set authentication header
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setRequestProperty("Accept", "application/vnd.github+json");
+        connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
+        connection.setRequestProperty("User-Agent", "ResourcepackPlus/1.0");
+
+        // GitHub API returns 302 redirect to actual download URL
+        connection.setInstanceFollowRedirects(true);
+        return connection;
     }
 }
