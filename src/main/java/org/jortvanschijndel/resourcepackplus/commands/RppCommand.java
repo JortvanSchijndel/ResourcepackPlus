@@ -85,7 +85,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
     private void handleGithub(CommandSender sender, String[] args) {
         if (args.length < 2) {
             Messaging.sendMini(sender, "<gold>[RPP] How to get a GitHub Access Token:");
-            Messaging.sendMini(sender, "<gray>1) Visit https://github.com/settings/tokens");
+            Messaging.sendMini(sender, "<gray>1) Visit <click:open_url:'https://github.com/settings/tokens'>https://github.com/settings/tokens</click>");
             Messaging.sendMini(sender, "<gray>2) Create a classic token with at least 'repo' scope for private repos.");
             Messaging.sendMini(sender, "<gray>Then run: <yellow>/rpp github <token>");
             return;
@@ -213,9 +213,9 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
         }
 
         if (args.length < 3) {
-            Messaging.sendMini(sender, "<gold>[RPP] Link Dropbox (permanent setup):");
-            Messaging.sendMini(sender, ",gray>Usage: /rpp dropbox <appKey> <appSecret>");
-            Messaging.sendMini(sender, "<gray>1) Create a Dropbox app at: https://www.dropbox.com/developers/apps");
+            Messaging.sendMini(sender, "<gold>[RPP] Link Dropbox:");
+            Messaging.sendMini(sender, "<gray>Usage: /rpp dropbox <appKey> <appSecret>");
+            Messaging.sendMini(sender, "<gray>1) Create a Dropbox app at: <click:open_url:'https://www.dropbox.com/developers/apps'>https://www.dropbox.com/developers/apps</click>");
             Messaging.sendMini(sender, "<gray>2) Add 'files.content.write', 'files.content.read', 'sharing.write', 'sharing.read' permissions.");
             Messaging.sendMini(sender, "<gray>3) Run this command with your app key & secret.");
             return;
@@ -230,7 +230,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                 "&response_type=code&token_access_type=offline";
 
         Messaging.sendMini(sender, "<gold>[RPP] Click this link in your browser to authorize Dropbox:");
-        Messaging.sendMini(sender, "<yellow>" + link);
+        Messaging.sendMini(sender, "<yellow><click:open_url:'" + link + "'>" + link + "</click>");
         Messaging.sendMini(sender, "<gray>After approving, paste the code here (without a slash). This will be private.");
     }
 
@@ -291,7 +291,7 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
                     GitHubService gh = new GitHubService(tokens.getGithubToken());
                     String repoSlug = gh.parseOwnerRepoFromUrl(ghUrl);
                     if (repoSlug == null) {
-                        Messaging.sendMini(sender, "<red>[RPP] Could not parse GitHub URL. Expected like: https://github.com/<owner>/<repo>");
+                        Messaging.sendMini(sender, "<red>[RPP] Could not parse GitHub URL. Expected like: <click:open_url:'https://github.com/<owner>/<repo>'>https://github.com/&lt;owner&gt;/&lt;repo&gt;</click>");
                         return;
                     }
                     Messaging.sendMini(sender, "<green>[RPP] GitHub repo detected: <yellow" + repoSlug + " <gray>(branch " + branch + ")");
@@ -492,4 +492,3 @@ public class RppCommand implements CommandExecutor, TabCompleter, Listener {
         return Collections.emptyList();
     }
 }
-
