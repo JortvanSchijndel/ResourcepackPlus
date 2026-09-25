@@ -26,7 +26,7 @@ ___
 # ResourcepackPlus
 ResourcepackPlus is a Minecraft plugin that automatically keeps your server’s resource pack up to date. It pulls the pack from GitHub, uploads it to Dropbox, and updates server.properties with the correct SHA-1 and URL. Storing the pack on GitHub makes version control and collaboration easy, while Dropbox provides a direct download link for Minecraft to use.
 
-I originally built this for a Minecraft theme park project, but open-sourced it so anyone can use it for their own server. The plugin is built with the help of AI.
+I originally built this for a Minecraft theme park project (IngeniaMC), but open-sourced it so anyone can use it for their own server. The plugin is fully built with AI (Gemini, Claude & ChatGPT).
 
 ## Setup
 
